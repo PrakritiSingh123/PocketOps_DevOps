@@ -1,0 +1,349 @@
+<!-- Page Content -->
+<div class="content container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Clients</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a routerLink="/dashboard">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Clients</li>
+                </ul>
+            </div>
+            <div class="col-auto float-right ml-auto">
+                <a  class="btn add-btn" data-toggle="modal" data-target="#add_client" (click)="resetForm()"><i
+                        class="fa fa-plus"></i>
+                    Add Client</a>
+                <div class="view-icons">
+                    <a routerLink="/clients/clientspage" class="grid-view btn btn-link active"><i
+                            class="fa fa-th"></i></a>
+                    <a routerLink="/clients/clientslist" class="list-view btn btn-link"><i class="fa fa-bars"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Page Header -->
+
+    <!-- Search Filter -->
+    <div class="row filter-row">
+        <div class="col-sm-6 col-md-3">
+            <div class="form-group form-focus">
+                <input type="text" class="form-control floating" (input)="searchID($event.target.value)">
+                <label class="focus-label">Client ID</label>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <div class="form-group form-focus">
+                <input type="text" class="form-control floating" (input)="searchByName($event.target.value)">
+                <label class="focus-label">Company / Client Name</label>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <div class="form-group form-focus select-focus">
+                <select class="form-control select floating" (input)="searchbyCompany($event.target.value)">
+                    <option value="">Select Company</option>
+                    <option *ngFor="let company of companiesList" value="{{company}}">{{company}}</option>
+                </select>
+                <label class="focus-label">Company</label>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <button class="btn btn-success btn-block" (click)="onSearch()"> Search </button>
+        </div>
+    </div>
+    <!-- Search Filter -->
+
+    <div class="row staff-grid-row">
+        <div *ngFor="let data of clientsData; let i = index " class="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
+            <div class="profile-widget">
+                <div class="profile-img">
+                    <a routerLink="/clients/clientsprofile/" [queryParams]="{'_id': data._id}" class="avatar"><img alt=""
+                            src="assets/img/profiles/avatar-{{ i + 1 }}.jpg"></a>
+                </div>
+                <div class="dropdown profile-action">
+                    <a  class="action-icon dropdown-toggle cursor-pointer" data-toggle="dropdown" aria-expanded="false"><i
+                            class="material-icons">more_vert</i></a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item"  data-toggle="modal" data-target="#edit_client"
+                            (click)="onEditClient(data._id)"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                        <a class="dropdown-item"  data-toggle="modal" data-target="#delete_client"
+                            (click)="tempId = data._id"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                    </div>
+                </div>
+                <h4 class="user-name m-t-10 mb-0 text-ellipsis"><a
+                        routerLink="/clients/clientsprofile/" [queryParams]="{'_id': data._id}">{{data.Company_Name}}</a>
+                </h4>
+                <h5 class="user-name m-t-10 mb-0 text-ellipsis"><a
+                        routerLink="/clients/clientsprofile/" [queryParams]="{'_id': data._id}">{{data['Client Id']}}</a></h5>
+                <!-- <div class="small text-muted">{{data.role}}</div> -->
+                <!-- <a routerLink="/apps/chat" class="btn btn-white btn-sm m-t-10">Message</a> -->
+                <a routerLink="/clients/clientsprofile/" [queryParams]="{'_id': data._id}" class="btn btn-white btn-sm m-t-10">View Profile</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Page Content -->
+
+<!-- Add Client Modal -->
+<div id="add_client" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Client</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="addClientForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Company / Client Name <span class="text-danger">*</span></label>
+                                <input class="form-control" type="text"
+                                    [class.invalid]="addClientForm.get('Company_Name').invalid && addClientForm.get('Company_Name').touched"
+                                    formControlName="Company_Name">
+                                <div
+                                    *ngIf="addClientForm.get('Company_Name').invalid && addClientForm.get('Company_Name').touched">
+                                    <small
+                                        *ngIf="addClientForm.get('Company_Name').invalid && addClientForm.get('Company_Name').touched"
+                                        class="text-danger"> *Company is required</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Client ID <span class="text-danger">*</span></label>
+                                <input class="form-control" type="text"
+                                    [class.invalid]="addClientForm.get('Client Id').invalid && addClientForm.get('Client Id').touched"
+                                    formControlName="Client Id">
+                                <div
+                                    *ngIf="addClientForm.get('Client Id').invalid && addClientForm.get('Client Id').touched">
+                                    <small
+                                        *ngIf="addClientForm.get('Client Id').invalid && addClientForm.get('Client Id').touched"
+                                        class="text-danger"> *Id is required</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12" formGroupName="Autorise_Person_Detail1">
+                            <div class="row">
+                                <label class="col-md-12 col-form-label">Primary Authorise Person Detail</label>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Name <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text"
+                                            formControlName="Name">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Desgination <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text"
+                                            formControlName="Desgination">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Contact <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text"
+                                            formControlName="Contact">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Email id <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text"
+                                            formControlName="Email id">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12" formGroupName="Autorise_Person_Detail2">
+                            <div class="row">
+                                <label class="col-md-12 col-form-label">Secondary Authorise Person Detail</label>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Name <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text"
+                                            formControlName="Name">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Desgination <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text"
+                                            formControlName="Desgination">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Contact <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text"
+                                            formControlName="Contact">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Email id <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text"
+                                            formControlName="Email id">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="submit-section">
+                        <button class="btn btn-primary submit-btn" [disabled]="addClientForm.invalid" (click)="onAddClient()">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Add Client Modal -->
+
+<!-- Edit Client Modal -->
+<div id="edit_client" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Client</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="editClientForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Company / Client Name <span class="text-danger">*</span></label>
+                                <input class="form-control" type="text"
+                                    [class.invalid]="editClientForm.get('Company_Name').invalid && editClientForm.get('Company_Name').touched"
+                                    formControlName="Company_Name">
+                                <div
+                                    *ngIf="editClientForm.get('Company_Name').invalid && editClientForm.get('Company_Name').touched">
+                                    <small
+                                        *ngIf="editClientForm.get('Company_Name').invalid && editClientForm.get('Company_Name').touched"
+                                        class="text-danger"> *Company is required</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Client ID <span class="text-danger">*</span></label>
+                                <input class="form-control" type="text"
+                                    [class.invalid]="editClientForm.get('Client Id').invalid && editClientForm.get('Client Id').touched"
+                                    formControlName="Client Id">
+                                <div
+                                    *ngIf="editClientForm.get('Client Id').invalid && editClientForm.get('Client Id').touched">
+                                    <small
+                                        *ngIf="editClientForm.get('Client Id').invalid && editClientForm.get('Client Id').touched"
+                                        class="text-danger"> *Id is required</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12" formGroupName="Autorise_Person_Detail1">
+                            <div class="row">
+                                <label class="col-md-12 col-form-label">Primary Authorise Person Detail</label>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Name <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text"
+                                            formControlName="Name">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Desgination <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text"
+                                            formControlName="Desgination">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Contact <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text"
+                                            formControlName="Contact">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Email id <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text"
+                                            formControlName="Email id">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12" formGroupName="Autorise_Person_Detail2">
+                            <div class="row">
+                                <label class="col-md-12 col-form-label">Secondary Authorise Person Detail</label>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Name <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text"
+                                            formControlName="Name">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Desgination <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text"
+                                            formControlName="Desgination">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Contact <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text"
+                                            formControlName="Contact">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Email id <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text"
+                                            formControlName="Email id">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="submit-section">
+                        <button class="btn btn-primary submit-btn" [disabled]="editClientForm.invalid" (click)="onSave()">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Edit Client Modal -->
+
+<!-- Delete Client Modal -->
+<div class="modal custom-modal fade" id="delete_client" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-header">
+                    <h3>Delete Client</h3>
+                    <p>Are you sure want to delete?</p>
+                </div>
+                <div class="modal-btn delete-action">
+                    <div class="row">
+                        <div class="col-6">
+                            <a  class="btn btn-primary continue-btn"
+                                (click)="onDelete()">Delete</a>
+                        </div>
+                        <div class="col-6">
+                            <a  data-dismiss="modal"
+                                class="btn btn-primary cancel-btn">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Delete Client Modal -->

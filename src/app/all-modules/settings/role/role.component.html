@@ -1,0 +1,188 @@
+<!-- Page Content -->
+<div class="content container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="page-title">Roles & Permissions</h3>
+            </div>
+        </div>
+    </div>
+    <!-- /Page Header -->
+
+    <div class="row">
+        <div class="col-sm-4 col-md-4 col-lg-4 col-xl-3">
+            <a class="btn btn-primary btn-block" data-toggle="modal" data-target="#add_role"><i
+                    class="fa fa-plus"></i> Add Roles</a>
+            <div class="roles-menu role-table-height role-table-scroll">
+                <ul>
+                    <li [ngClass]="{ 'active' : selectedRoleId == roles._id }" *ngFor="let roles of allroles;let i = index" class="cursor-pointer">
+                        <a (click)="selectedRoleId = roles._id;" >{{roles.Role}} {{roles.Level}}
+                            <span class="role-action">
+                                <span class="action-circle large" data-toggle="modal" data-target="#edit_role" (click)="edit(roles._id)">
+                                    <i class="material-icons">edit</i>
+                                </span>
+                                <span class="action-circle large delete-btn" data-toggle="modal"
+                                    data-target="#delete_role" (click)="tempId = roles._id">
+                                    <i class="material-icons">delete</i>
+                                </span>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-8 col-md-8 col-lg-8 col-xl-9">
+            <a [class.disabled]="!saveMapping" class="btn btn-primary pull-right" (click)="editRolesSubmit($event)"><i
+                class="fa fa-floppy-o"></i> Save changes</a>
+            <div *ngIf="selectedRole(selectedRoleId)" class="table-responsive role-table-height role-table-scroll">
+                <table class="table table-striped custom-table">
+                    <thead class="role-table-header">
+                        <tr>
+                            <th>Module</th>
+                            <th>Sub-Module</th>
+                            <th class="text-center">Read</th>
+                            <th class="text-center">Write</th>
+                            <th class="text-center">Create</th>
+                            <th class="text-center">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let module of selectedRole(selectedRoleId).AccessList">
+                            <td>{{module.module}}</td>
+                            <td>{{module.subModule}}</td>
+                            <td class="text-center">
+                                <input type="checkbox" checked="" [(ngModel)]="module.R" (ngModelChange)="onChange($event)">
+                            </td>
+                            <td class="text-center">
+                                <input type="checkbox" checked="" [(ngModel)]="module.W" (ngModelChange)="onChange($event)">
+                            </td>
+                            <td class="text-center">
+                                <input type="checkbox" checked="" [(ngModel)]="module.C" (ngModelChange)="onChange($event)">
+                            </td>
+                            <td class="text-center">
+                                <input type="checkbox" checked="" [(ngModel)]="module.D" (ngModelChange)="onChange($event)">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Page Content -->
+
+<!-- Add Role Modal -->
+<div id="add_role" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Role</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form (ngSubmit)="addRolesSubmit()" [formGroup]="addRoles">
+                    <div class="form-group">
+                        <label>Role Name <span class="text-danger">*</span></label>
+                        <input class="form-control" type="text" [class.invalid]="addRoles.get('addRoleName').invalid && addRoles.get('addRoleName').touched"
+                        formControlName="addRoleName">
+                        <div
+                        *ngIf="addRoles.get('addRoleName').invalid && addRoles.get('addRoleName').touched">
+                        <small
+                            *ngIf="addRoles.get('addRoleName').invalid && addRoles.get('addRoleName').touched"
+                            class="text-danger"> *Role name is required</small>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Level <span class="text-danger">*</span></label>
+                        <input class="form-control" type="text" [class.invalid]="addRoles.get('addRoleLevel').invalid && addRoles.get('addRoleLevel').touched"
+                        formControlName="addRoleLevel">
+                        <div
+                        *ngIf="addRoles.get('addRoleLevel').invalid && addRoles.get('addRoleLevel').touched">
+                        <small
+                            *ngIf="addRoles.get('addRoleLevel').invalid && addRoles.get('addRoleLevel').touched"
+                            class="text-danger"> *Role level is required</small>
+                    </div>
+                    </div>
+                    <div class="submit-section">
+                        <button [disabled]="addRoles.invalid" class="btn btn-primary submit-btn">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Add Role Modal -->
+
+<!-- Edit Role Modal -->
+<div id="edit_role" class="modal custom-modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content modal-md">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Role</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form (ngSubmit)="editRolesSubmit()" [formGroup]="editRoles">
+                    <div class="form-group">
+                        <label>Role Name <span class="text-danger">*</span></label>
+                        <input class="form-control" value="Team Leader" type="text" [class.invalid]="editRoles.get('editRoleName').invalid && editRoles.get('editRoleName').touched"
+                        formControlName="editRoleName">
+                        <div
+                        *ngIf="editRoles.get('editRoleName').invalid && editRoles.get('editRoleName').touched">
+                        <small
+                            *ngIf="editRoles.get('editRoleName').invalid && editRoles.get('editRoleName').touched"
+                            class="text-danger"> *Role name is required</small>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Level <span class="text-danger">*</span></label>
+                        <input class="form-control" value="Team Leader" type="text" [class.invalid]="editRoles.get('editRoleLevel').invalid && editRoles.get('editRoleLevel').touched"
+                        formControlName="editRoleLevel">
+                        <div
+                        *ngIf="editRoles.get('editRoleLevel').invalid && editRoles.get('editRoleLevel').touched">
+                        <small
+                            *ngIf="editRoles.get('editRoleLevel').invalid && editRoles.get('editRoleLevel').touched"
+                            class="text-danger"> *Level is required</small>
+                    </div>
+                    </div>
+                    <div class="submit-section">
+                        <button [disabled]="editRoles.invalid" type="submit" class="btn btn-primary submit-btn">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Edit Role Modal -->
+
+<!-- Delete Role Modal -->
+<div class="modal custom-modal fade" id="delete_role" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-header">
+                    <h3>Delete Role</h3>
+                    <p>Are you sure want to delete?</p>
+                </div>
+                <div class="modal-btn delete-action">
+                    <div class="row">
+                        <div class="col-6">
+                            <a  class="btn btn-primary continue-btn" (click)="deleteRoles()">Delete</a>
+                        </div>
+                        <div class="col-6">
+                            <a  data-dismiss="modal"
+                                class="btn btn-primary cancel-btn">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Delete Role Modal -->

@@ -1,0 +1,7 @@
+.content {
+	padding: 30px;
+}
+
+.personal-info > li > .text {
+	overflow: unset !important;
+}

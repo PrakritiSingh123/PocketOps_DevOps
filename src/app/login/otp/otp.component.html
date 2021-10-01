@@ -1,0 +1,86 @@
+<!-- Main Wrapper -->
+<div class="main-wrapper">
+    <div class="account-content">
+        <a routerLink = "/login/joblist" class="btn btn-primary apply-btn">Apply Job</a>
+        <div class="container">
+
+            <!-- Account Logo -->
+            <div class="account-logo">
+                <a routerLink="/dashboard"><img src="assets/img/logo2.png" alt="Dreamguy's Technologies"></a>
+            </div>
+            <!-- /Account Logo -->
+
+            <div *ngIf="!otpEntered" class="account-box">
+                <div class="account-wrapper">
+                    <h3 class="account-title">Enter 6 digit OTP</h3>
+                    <p class="account-subtitle">sent to your email</p>
+
+                    <!-- Account Form -->
+                    <form (ngSubmit)="submitOtp()" [formGroup]="otpForm">
+                        <div class="otp-wrap form-group">
+                            <input
+                            [class.invalid]="otpForm.get('Otp').invalid && otpForm.get('Otp').touched"
+                            formControlName="Otp" type="tel" placeholder="" maxlength="6" class="otp-input">
+                            <div *ngIf="otpForm.get('Otp').invalid && otpForm.get('Otp').touched">
+                              <small *ngIf="otpForm.get('Otp').invalid && otpForm.get('Otp').touched" class="text-danger">
+                                *OTP is required</small
+                              >
+                            </div>
+                        </div>
+                        <div class="form-group text-center">
+                            <button [disabled]="otpForm.invalid" class="btn btn-primary account-btn" type="submit">Enter</button>
+                        </div>
+                        <div class="account-footer">
+                            <p>Not yet received? <a >Resend OTP</a></p>
+                            <p>Back to <a routerLink = "/login/login">Login</a></p>
+                        </div>
+                    </form>
+                    <!-- /Account Form -->
+
+                </div>
+            </div>
+
+            <div *ngIf="otpEntered" class="account-box">
+                <div class="account-wrapper">
+                    <h3 class="account-title">Enter new Password</h3>
+
+                    <!-- Account Form -->
+                    <form (ngSubmit)="changePassword()" [formGroup]="passwordForm">
+                        <div class="otp-wrap form-group">
+                            <label>New Password</label>
+                            <input
+                            [class.invalid]="passwordForm.get('Password').invalid && passwordForm.get('Password').touched"
+                            formControlName="Password" type="password" placeholder="" class="otp-input">
+                            <div *ngIf="passwordForm.get('Password').invalid && passwordForm.get('Password').touched">
+                              <small *ngIf="passwordForm.get('Password').invalid && passwordForm.get('Password').touched" class="text-danger">
+                                *Password is required</small
+                              >
+                            </div>
+                        </div>
+                        <div class="otp-wrap form-group">
+                            <label>Confirm Password</label>
+                            <input
+                            [class.invalid]="passwordForm.get('ConfirmPassword').invalid && passwordForm.get('ConfirmPassword').touched"
+                            formControlName="ConfirmPassword" type="password" placeholder="" class="otp-input">
+                            <div *ngIf="passwordForm.get('ConfirmPassword').invalid && passwordForm.get('ConfirmPassword').touched || passwordForm.get('ConfirmPassword').value !== passwordForm.get('Password').value">
+                              <small *ngIf="passwordForm.get('ConfirmPassword').invalid && passwordForm.get('ConfirmPassword').touched || passwordForm.get('ConfirmPassword').value !== passwordForm.get('Password').value" class="text-danger">
+                                *Both password should be same</small
+                              >
+                            </div>
+                        </div>
+                        <div class="form-group text-center">
+                            <button [disabled]="passwordForm.invalid" class="btn btn-primary account-btn" type="submit">Enter</button>
+                        </div>
+                        <div class="account-footer">
+                            <p>Not yet received? <a >Resend OTP</a></p>
+                            <p>Back to <a routerLink = "/login/login">Login</a></p>
+                        </div>
+                    </form>
+                    <!-- /Account Form -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Main Wrapper -->
