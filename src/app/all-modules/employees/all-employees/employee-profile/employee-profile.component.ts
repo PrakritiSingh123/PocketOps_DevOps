@@ -73,7 +73,7 @@ export class EmployeeProfileComponent implements OnInit {
   }
 
   loadGeneralInfo() {
-    this.srvModuleService.get("employee/getEmployee-GeneralInformation?id=" + this._id).subscribe((data) => {
+    this.srvModuleService.get("employee/getEmployee-GeneralInformation?id=" + this._id?this._id:null).subscribe((data) => {
       console.log(data);
       this.generalinfo = data.data;
     }, (err: HttpErrorResponse) => {

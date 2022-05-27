@@ -33,8 +33,8 @@ export class AllModulesService {
   // Headers Setup
   headers = {
     headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json"
+      "Accept": "application/json",
+      "authorization": sessionStorage.getItem("token")||''
     }
   };
 
@@ -51,7 +51,7 @@ export class AllModulesService {
 
   // Get Method Api
   get(type): Observable<any> {
-    this.headers.headers["authorization"] = "";
+    // this.headers.headers["authorization"] = "";
     this.apiurl = `${environment.baseUrl}/${type}`;
     console.log(this.apiurl);
     return this.http
@@ -64,7 +64,7 @@ export class AllModulesService {
 
   // Post Method Api
   add(user: any, type): Observable<any> {
-    this.headers.headers["authorization"] = "";
+    // this.headers.headers["authorization"] = "";
     this.apiurl = `${environment.baseUrl}/${type}`;
     return this.http
       .post(this.apiurl, user, this.headers)
@@ -76,7 +76,7 @@ export class AllModulesService {
 
   // Update Method Api
   update(user: any, type): Observable<any> {
-    this.headers.headers["authorization"] = "";
+    // this.headers.headers["authorization"] = "";
     this.apiurl = `${environment.baseUrl}/${type}`;
     const url = `${this.apiurl}/${user.id}`;
     return this.http.put<any>(url, user, this.headers).pipe(
@@ -87,7 +87,7 @@ export class AllModulesService {
 
   // Delete Method Api
   delete(id: string | string[], type): Observable<id> {
-    this.headers.headers["authorization"] = "";
+    // this.headers.headers["authorization"] = "";
     this.apiurl = `${environment.baseUrl}/${type}`;
     const url = `${this.apiurl}?id=${id}`;
     return this.http
