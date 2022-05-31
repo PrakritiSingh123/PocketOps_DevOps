@@ -77,9 +77,9 @@
                     <tbody>
                         <tr *ngFor="let project of projects;let i = index">
                             <td>
-                                <a routerLink="/projects/projectview/{{project.id}}">{{project.name}}</a>
+                                <a routerLink="/projects/projectview/{{project.id}}">{{project["Project Name"]}}</a>
                             </td>
-                            <td>{{project.projectId}}</td>
+                            <td>{{project._id}}</td>
                             <td>
                                 <ul class="team-members">
                                     <li>
@@ -161,12 +161,12 @@
                                     </li>
                                 </ul>
                             </td>
-                            <td>{{project.startDate | customDate}} </td>
+                            <td>{{project["Start Date"] | date:'mediumDate'}} </td>
                             <td>
                                 <div class="dropdown action-label">
                                     <a href="" class="btn btn-white btn-sm btn-rounded dropdown-toggle"
                                         data-toggle="dropdown" aria-expanded="false"><i
-                                            class="fa fa-dot-circle-o text-danger"></i>{{project.priority}}</a>
+                                            class="fa fa-dot-circle-o text-danger"></i>{{project.Priority}}</a>
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item"><i class="fa fa-dot-circle-o text-danger"></i>
                                             High</a>
@@ -191,7 +191,7 @@
                             </td>
                             <td class="text-right">
                                 <div class="dropdown dropdown-action">
-                                    <a class="action-icon dropdown-toggle" data-toggle="dropdown"
+                                    <a class="action-icon dropdown-toggle cursor-pointer" data-toggle="dropdown"
                                         aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <a class="dropdown-item" data-toggle="modal" data-target="#edit_project"

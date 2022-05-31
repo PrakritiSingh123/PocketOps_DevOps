@@ -1,4 +1,5 @@
 import { DatePipe } from "@angular/common";
+import { HttpErrorResponse } from "@angular/common/http";
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { DataTableDirective } from "angular-datatables";
@@ -30,7 +31,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private allModulesService: AllModulesService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.dtOptions = {
@@ -85,8 +86,8 @@ export class ProjectListComponent implements OnInit, OnDestroy {
     }, 1000);
   }
   getProjects() {
-    this.allModulesService.get("projects").subscribe((data) => {
-      this.projects = data;
+    this.allModulesService.get("project/proj-list").subscribe((data) => {
+      this.projects = data.data;
       this.rows = this.projects;
       this.srch = [...this.rows];
     });
@@ -122,26 +123,30 @@ export class ProjectListComponent implements OnInit, OnDestroy {
       "dd-MM-yyyy"
     );
     let newProject = {
-      name: this.addProjectForm.value.projectName,
-      description: this.addProjectForm.value.projectDescription,
-      endDate: EndDate,
-      startDate: StartDate,
-      priority: this.addProjectForm.value.projectPriority,
-      projectleader: this.addProjectForm.value.projectleader,
-      teamMember: this.addProjectForm.value.addTeamMembers,
-      projectId: "PRO-0012",
-    };
-    this.allModulesService.add(newProject, "projects").subscribe((data) => {
+      "_id": null,
+      "Project Name": this.addProjectForm.value.projectName,
+      "Start Date": this.addProjectForm.value.projectStartDate,
+      "End Date": this.addProjectForm.value.projectEndDate ? this.addProjectForm.value.projectEndDate : '',
+      "Rate": '',
+      "Priority": this.addProjectForm.value.projectPriority,
+      "Project Leader": this.addProjectForm.value.projectLeader,
+      "Team Member": this.addProjectForm.value.addTeamMembers,
+      "Description": this.addProjectForm.value.projectDescription,
+      "Modified": "",
+    }
+    this.allModulesService.add(newProject, "project/create-project").subscribe((data) => {
+      this.toastr.success("Project added sucessfully...!", "Success");
+      this.getProjects();
+      this.addProjectForm.reset();
       $("#datatable").DataTable().clear();
       this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
         dtInstance.destroy();
       });
       this.dtTrigger.next();
+    }, (err: HttpErrorResponse) => {
+      this.toastr.error("Failed to create project. please try again.");
     });
-    this.getProjects();
-    this.addProjectForm.reset();
     $("#create_project").modal("hide");
-    this.toastr.success("Project added sucessfully...!", "Success");
   }
 
   //Save Project

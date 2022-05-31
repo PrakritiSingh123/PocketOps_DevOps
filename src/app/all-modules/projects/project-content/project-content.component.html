@@ -61,7 +61,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="dropdown dropdown-action profile-action">
-                        <a class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
+                        <a class="action-icon dropdown-toggle cursor-pointer" data-toggle="dropdown" aria-expanded="false"><i
                                 class="material-icons">more_vert</i></a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" data-toggle="modal" data-target="#edit_project"
@@ -70,20 +70,20 @@
                                 (click)="tempId = project.id"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
                         </div>
                     </div>
-                    <h4 class="project-title"><a routerLink="/projects/projectview/{{project.id}}">{{project.name}}</a>
+                    <h4 class="project-title"><a routerLink="/projects/projectview/{{project.id}}">{{project["Project Name"]}}</a>
                     </h4>
                     <small class="block text-ellipsis m-b-15">
                         <span class="text-xs">1</span> <span class="text-muted">open tasks, </span>
                         <span class="text-xs">9</span> <span class="text-muted">tasks completed</span>
                     </small>
-                    <p class="text-muted">{{project.description}}
+                    <p class="text-muted overflow-ellipsis">{{project["Description"]}}
                     </p>
                     <div class="pro-deadline m-b-15">
                         <div class="sub-title">
                             Deadline:
                         </div>
                         <div class="text-muted">
-                            {{project.endDate}}
+                            {{project["Start Date"] | date:'mediumDate'}}
                         </div>
                     </div>
                     <div class="project-members m-b-15">
@@ -177,11 +177,11 @@
                             </li>
                         </ul>
                     </div>
-                    <p class="m-b-5">Progress <span class="text-success float-right">40%</span></p>
+                    <!-- <p class="m-b-5">Progress <span class="text-success float-right">40%</span></p>
                     <div class="progress progress-xs mb-0">
                         <div class="progress-bar bg-success" role="progressbar" data-toggle="tooltip" title="40%"
                             style="width: 40%"></div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
