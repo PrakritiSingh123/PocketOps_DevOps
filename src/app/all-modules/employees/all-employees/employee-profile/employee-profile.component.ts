@@ -4,6 +4,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { AllModulesService } from "src/app/all-modules/all-modules.service";
+import { decodeToken } from "src/app/helpers/jwt-helper";
 
 @Component({
   selector: "app-employee-profile",
@@ -64,6 +65,10 @@ export class EmployeeProfileComponent implements OnInit {
     });
     await this.activatedRoute.queryParams.subscribe(async (q) => {
       this._id = q._id;
+      if(!this._id){
+        let decodedToken = await decodeToken(sessionStorage.getItem('token'));
+        this._id = decodedToken['_id'];
+      }
       this.loadGeneralInfo();
       this.loadPersonalInfo();
       this.loadEmergencyContactInfo();
@@ -73,7 +78,7 @@ export class EmployeeProfileComponent implements OnInit {
   }
 
   loadGeneralInfo() {
-    this.srvModuleService.get("employee/getEmployee-GeneralInformation?id=" + this._id?this._id:null).subscribe((data) => {
+    this.srvModuleService.get("employee/getEmployee-GeneralInformation?id=" + this._id).subscribe((data) => {
       console.log(data);
       this.generalinfo = data.data;
     }, (err: HttpErrorResponse) => {
