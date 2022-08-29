@@ -228,41 +228,54 @@
                     <div class="card profile-box flex-fill">
                         <div class="card-body">
                             <h3 class="card-title">Family Informations <a class="edit-icon" data-toggle="modal"
-                                    data-target="#family_info_modal"><i class="fa fa-pencil"></i></a></h3>
-                            <div class="table-responsive">
-                                <table class="table table-nowrap">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Relationship</th>
-                                            <th>Date of Birth</th>
-                                            <th>Phone</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Leo</td>
-                                            <td>Brother</td>
-                                            <td>Feb 16th, 2019</td>
-                                            <td>9876543210</td>
-                                            <td class="text-right">
-                                                <div class="dropdown dropdown-action">
-                                                    <a aria-expanded="false" data-toggle="dropdown"
-                                                        class="action-icon dropdown-toggle"><i
-                                                            class="material-icons">more_vert</i></a>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item"><i class="fa fa-pencil m-r-5"></i>
-                                                            Edit</a>
-                                                        <a class="dropdown-item"><i class="fa fa-trash-o m-r-5"></i>
-                                                            Delete</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    data-target="#emergency_contact_modal"><i class="fa fa-pencil"></i></a></h3>
+                            <h5 class="section-title">Primary</h5>
+                            <ul class="family-info">
+                                <li class="row mx-0">
+                                    <div class="title">Name</div>
+                                    <div class="text">{{familyContactForm.value.Primary.Name}}</div>
+                                </li>
+                                <li class="row mx-0">
+                                    <div class="title">Relationship</div>
+                                    <div class="text">{{familyContactForm.value.Primary.Relationship}}</div>
+                                </li>
+                                <li class="row mx-0">
+                                    <div class="title">Phone </div>
+                                    <div class="text">{{familyContactForm.value.Primary.Phone}}
+                                        <span *ngIf="familyContactForm.value.Secondary['Phone 2']">, </span>
+                                        {{familyContactForm.value.Primary['Phone 2']}}</div>
+                                </li>
+                                <li class="row mx-0">
+                                    <div class="title">DOB </div>
+                                    <div class="text">{{familyContactForm.value.Primary.DOB}}
+                                        <span *ngIf="familyContactForm.value.Secondary['Phone 2']">, </span>
+                                        {{familyContactForm.value.Primary['Phone 2']}}</div>
+                                </li>
+                            </ul>
+                            <hr>
+                            <h5 class="section-title">Secondary</h5>
+                            <ul class="family-info">
+                                <li class="row mx-0">
+                                    <div class="title">Name</div>
+                                    <div class="text">{{familyContactForm.value.Secondary.Name}}</div>
+                                </li>
+                                <li class="row mx-0">
+                                    <div class="title">Relationship</div>
+                                    <div class="text">{{familyContactForm.value.Secondary.Relationship}}</div>
+                                </li>
+                                <li class="row mx-0">
+                                    <div class="title">Phone </div>
+                                    <div class="text">{{familyContactForm.value.Secondary.Phone}}
+                                        <span *ngIf="familyContactForm.value.Secondary['Phone 2']">, </span>
+                                        {{familyContactForm.value.Secondary['Phone 2']}}</div>
+                                </li>
+                                <li class="row mx-0">
+                                    <div class="title">DOB </div>
+                                    <div class="text">{{familyContactForm.value.Secondary.DOB}}
+                                        <span *ngIf="familyContactForm.value.Secondary['Phone 2']">, </span>
+                                        {{familyContactForm.value.Secondary['Phone 2']}}</div>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>

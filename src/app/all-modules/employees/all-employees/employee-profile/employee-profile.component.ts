@@ -52,6 +52,24 @@ export class EmployeeProfileComponent implements OnInit {
       "Phone 2": ["", []],
     }),
   });
+
+  public familyContactForm: FormGroup = this.formBuilder.group({
+    "_id": ["", [Validators.required]],
+    "Primary": this.formBuilder.group({
+      "Name": ["", [Validators.required]],
+      "Relationship": ["", [Validators.required]],
+      "Phone": ["", [Validators.required]],
+      "DOB": ["",[Validators.required]],
+    }),
+    "Secondary": this.formBuilder.group({
+      "Name": ["", [Validators.required]],
+      "Relationship": ["", [Validators.required]],
+      "Phone": ["", [Validators.required]],
+      "DOB": ["",[Validators.required]],
+    }),
+  });
+
+
   constructor(
     private toastr: ToastrService,
     private formBuilder: FormBuilder,
@@ -72,9 +90,11 @@ export class EmployeeProfileComponent implements OnInit {
       this.loadGeneralInfo();
       this.loadPersonalInfo();
       this.loadEmergencyContactInfo();
+      this.loadFamilyInformationInfo();
     });
     this.personalInfoForm.patchValue({ _id: this._id });
     this.emergencyContactForm.patchValue({ _id: this._id });
+    this.familyContactForm.patchValue({ _id: this._id });
   }
 
   loadGeneralInfo() {
@@ -141,6 +161,18 @@ export class EmployeeProfileComponent implements OnInit {
       console.log(data.data[0]);
       if (data.data[0]?._id) {
         this.emergencyContactForm.setValue(data.data[0]);
+      }
+    }, (err: HttpErrorResponse) => {
+      console.log(err);
+      this.toastr.error("Failed to update personal information", "Error");
+    })
+  }
+
+  loadFamilyInformationInfo() {
+    this.srvModuleService.get("employee/FindDataById-FamilyInformation?id=" + this._id).subscribe((data) => {
+      console.log(data.data[0]);
+      if (data.data[0]?._id) {
+        this.familyContactForm.setValue(data.data[0]);
       }
     }, (err: HttpErrorResponse) => {
       console.log(err);
