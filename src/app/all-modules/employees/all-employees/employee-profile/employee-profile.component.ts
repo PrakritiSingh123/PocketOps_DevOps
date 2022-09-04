@@ -22,7 +22,7 @@ export class EmployeeProfileComponent implements OnInit {
     "Last Name": "",
     "User Name": "",
     _id: "",
-  }
+  }''
   public personalInfoForm: FormGroup = this.formBuilder.group({
     "_id": ["", [Validators.required]],
     "DOB": ["", [Validators.required]],
