@@ -6,11 +6,10 @@ import { ToastrService } from "ngx-toastr";
 import { AllModulesService } from "src/app/all-modules/all-modules.service";
 import { decodeToken } from "src/app/helpers/jwt-helper";
 
-@Component({
-  selector: "app-employee-profile",
+@Component({  elector: "app-employee-profile",
   templateUrl: "./employee-profile.component.html",
   styleUrls: ["./employee-profile.component.css"],
-})
+});
 export class EmployeeProfileComponent implements OnInit {
   public addEmployeeForm: FormGroup;
   public _id: string;
